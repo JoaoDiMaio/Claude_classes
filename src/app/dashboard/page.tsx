@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Download } from 'lucide-react';
+import { Cloud } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { SummaryCards } from '@/components/dashboard/SummaryCards';
 import { MonthlyTrendChart } from '@/components/dashboard/MonthlyTrendChart';
 import { SpendingByCategory } from '@/components/dashboard/SpendingByCategory';
@@ -11,7 +12,8 @@ import { useExpenses } from '@/hooks/useExpenses';
 import { getMonthlyTotals, getTotalByCategory } from '@/lib/analytics';
 
 export default function DashboardPage() {
-  const { expenses, isLoaded, exportCSV } = useExpenses();
+  const router = useRouter();
+  const { expenses, isLoaded } = useExpenses();
 
   const monthlyData = getMonthlyTotals(expenses, 6);
   const categoryData = getTotalByCategory(expenses);
@@ -39,9 +41,14 @@ export default function DashboardPage() {
           <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
           <p className="text-sm text-slate-500 mt-1">Overview of your spending</p>
         </div>
-        <Button variant="secondary" size="sm" onClick={exportCSV} disabled={expenses.length === 0}>
-          <Download className="h-4 w-4" />
-          Export Data
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => router.push('/exports')}
+          disabled={expenses.length === 0}
+        >
+          <Cloud className="h-4 w-4" />
+          Cloud Export
         </Button>
       </div>
 
